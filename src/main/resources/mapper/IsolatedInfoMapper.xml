@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.power.mapper.IsolatedInfoMapper">
+  <resultMap id="BaseResultMap" type="com.power.entity.manage.IsolatedInfo">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="RID" jdbcType="NUMERIC" property="rid" />
+    <result column="ORG_ID" jdbcType="NUMERIC" property="orgId" />
+    <result column="ISOLATED_NAME" jdbcType="VARCHAR" property="isolatedName" />
+    <result column="IF_INBOUND" jdbcType="CHAR" property="ifInbound" />
+    <result column="NATION" jdbcType="VARCHAR" property="nation" />
+    <result column="FLIGHT_NUM" jdbcType="VARCHAR" property="flightNum" />
+    <result column="CERTIFICATE_NUM" jdbcType="VARCHAR" property="certificateNum" />
+    <result column="CERTIFICATE_TYPE" jdbcType="VARCHAR" property="certificateType" />
+    <result column="CARD_TYPE" jdbcType="VARCHAR" property="cardType" />
+    <result column="CARD_NUM" jdbcType="VARCHAR" property="cardNum" />
+    <result column="PHONE" jdbcType="VARCHAR" property="phone" />
+    <result column="INMATE_NAME" jdbcType="VARCHAR" property="inmateName" />
+    <result column="RIDGEPOLE" jdbcType="VARCHAR" property="ridgepole" />
+    <result column="FLOOR" jdbcType="VARCHAR" property="floor" />
+    <result column="ROOM_NUM" jdbcType="VARCHAR" property="roomNum" />
+    <result column="ISOLATED_START" jdbcType="TIMESTAMP" property="isolatedStart" />
+    <result column="ISOLATED_END" jdbcType="TIMESTAMP" property="isolatedEnd" />
+    <result column="PURPOSE_CODE" jdbcType="VARCHAR" property="purposeCode" />
+    <result column="PURPOSE_ADDR" jdbcType="VARCHAR" property="purposeAddr" />
+    <result column="INPUT_TYPE" jdbcType="CHAR" property="inputType" />
+    <result column="INPUT_ID" jdbcType="NUMERIC" property="inputId" />
+    <result column="INPUT_NAME" jdbcType="VARCHAR" property="inputName" />
+    <result column="INPUT_ORGID" jdbcType="NUMERIC" property="inputOrgid" />
+    <result column="INPUT_ORGNAME" jdbcType="VARCHAR" property="inputOrgname" />
+    <result column="INPUT_DATE" jdbcType="TIMESTAMP" property="inputDate" />
+    <result column="UPDATE_ID" jdbcType="NUMERIC" property="updateId" />
+    <result column="UPDATE_NAME" jdbcType="VARCHAR" property="updateName" />
+    <result column="UPDATE_ORGID" jdbcType="NUMERIC" property="updateOrgid" />
+    <result column="UPDATE_ORGNAME" jdbcType="VARCHAR" property="updateOrgname" />
+    <result column="UPDATE_DATE" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="AUDIT_ID" jdbcType="NUMERIC" property="auditId" />
+    <result column="AUDIT_NAME" jdbcType="VARCHAR" property="auditName" />
+    <result column="AUDIT_ORGID" jdbcType="NUMERIC" property="auditOrgid" />
+    <result column="AUDIT_ORGNAME" jdbcType="VARCHAR" property="auditOrgname" />
+    <result column="AUDIT_DATE" jdbcType="TIMESTAMP" property="auditDate" />
+    <result column="ORG_CODE" jdbcType="VARCHAR" property="orgCode" />
+    <result column="ESTIMATED_DE_ISOLATION_DATE" jdbcType="TIMESTAMP" property="estimatedDeIsolationDate" />
+    <result column="AUDIT_STATE" jdbcType="VARCHAR" property="auditState" />
+    <result column="ENTRY_TYPE" jdbcType="VARCHAR" property="entryType" />
+    <result column="SHIP" jdbcType="VARCHAR" property="ship" />
+    <result column="ENTRY_REMARKS" jdbcType="VARCHAR" property="entryRemarks" />
+    <result column="IF_ILLEGAL_ENTRY" jdbcType="CHAR" property="ifIllegalEntry" />
+    <result column="REMARKS" jdbcType="VARCHAR" property="remarks" />
+  </resultMap>
+</mapper>
