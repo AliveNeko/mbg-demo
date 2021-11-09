@@ -16,7 +16,7 @@
         <oracle.version>12.2.0.1</oracle.version>
         <mybatis.version>3.5.7</mybatis.version>
         <mapper.version>4.1.5</mapper.version>
-        <mybatis.generator.version>1.4.0</mybatis.generator.version>
+        <mybatis.generator.version>1.3.7</mybatis.generator.version>
     </properties>
 
     <dependencies>
@@ -61,7 +61,7 @@
             <plugin>
                 <groupId>org.mybatis.generator</groupId>
                 <artifactId>mybatis-generator-maven-plugin</artifactId>
-                <version>1.3.6</version>
+                <version>1.3.7</version>
                 <configuration>
                     <configurationFile>src/main/resources/config/generator/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>

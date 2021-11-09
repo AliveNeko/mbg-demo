@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+<!--  参考通用mapper作者的博文：https://blog.csdn.net/isea533/article/details/42102297  -->
+<!--  参考mybatis generator官方文档：https://mybatis.org/generator/index.html  -->
+<!--
+    可以指定resource中的文件，这里可以读取是因为添加了mbg-demo项目，因此修改配置文件后需要install一下
+    也可以使用url指定文件系统的特定文件，resource和url不能同时存在
+-->
+    <properties resource="application.properties"/>
+<!--    <properties url="file:///D:/Project/Custom/mbg-demo/src/main/resources/application.properties"/>-->
+
+<!--
+    context: 1或多，
+    指定运行环境及如何处理
+    id: 必须
+    defaultModelType:定义MBG如何生成实体类
+        * conditional:这是默认值,这个模型和下面的hierarchical类似，除了如果那个单独的类将只包含一个字段，将不会生成一个单独的类。 因此,如果一个表的主键只有一个字段,那么不会为该字段生成单独的实体类,会将该字段合并到基本实体类中。
+        * flat:该模型为每一张表只生成一个实体类。这个实体类包含表中的所有字段。这种模型最简单，推荐使用。
+        * hierarchical:如果表有主键,那么该模型会产生一个单独的主键实体类,如果表还有BLOB字段， 则会为表生成一个包含所有BLOB字段的单独的实体类,然后为所有其他的字段生成一个单独的实体类。 MBG会在所有生成的实体类之间维护一个继承关系。
+    targetRuntime:此属性用于指定生成的代码的运行时环境。该属性支持以下可选值：
+        * MyBatis3: 这是默认值，会生成Example对象
+        * MyBatis3Simple: 不会生成Example
+        * Ibatis2Java2
+        * Ibatis2Java5
+
+-->
+    <context id="Mysql" targetRuntime="MyBatis3Simple" defaultModelType="flat">
+<!--
+         beginningDelimiter、endingDelimiter起始分隔符与结束分隔符
+-->
+        <property name="beginningDelimiter" value="`"/>
+        <property name="endingDelimiter" value="`"/>
+<!--
+        这里使用了通用mapper的插件，不装这个插件就可以使用原本的生成方式，装了之后会生成受通用mapper支持的方式
+-->
+        <plugin type="tk.mybatis.mapper.generator.MapperPlugin">
+            <property name="mappers" value="tk.mybatis.mapper.common.Mapper"/>
+            <property name="caseSensitive" value="true"/>
+        </plugin>
+
+        <commentGenerator type="org.mybatis.generator.internal.DefaultCommentGeneratorEx">
+            <property name="suppressAllComments" value="true"/>
+            <property name="suppressDate" value="true"/>
+        </commentGenerator>
+
+<!--
+        设置数据库链接信息
+        如果同一个库中不同schema中有相同名字的表，在xml中会生成多次
+        可以在url中指定schema，或者在table中配置schema
+-->
+        <jdbcConnection driverClass="${spring.datasource.driver-class-name}"
+                        connectionURL="${spring.datasource.url}"
+                        userId="${spring.datasource.username}"
+                        password="${spring.datasource.password}">
+<!--
+            设定连接时读取注释
+            详见：https://blog.csdn.net/qq_21251983/article/details/52849079?ivk_sa=1024320u
+-->
+            <!-- 针对oracle数据库 -->
+            <property name="remarksReporting" value="true"/>
+            <!-- 针对mysql数据库 -->
+            <!--            <property name="useInformationSchema" value="true"/>-->
+        </jdbcConnection>
+
+        <!-- 设置自定义类型转换 -->
+        <javaTypeResolver type="org.mybatis.generator.internal.types.JavaTypeResolverDefaultImplEx">
+<!--
+            强制使用BigDecimals
+-->
+<!--            <property name="forceBigDecimals" value="true" />-->
+        </javaTypeResolver>
+
+<!--
+        实体类生成目录
+        targetProject可以指定绝对路径
+        <property>属性
+            rootClass可以指定需要集成的父类
+            trimStrings可以在生成时进行trim
+-->
+        <javaModelGenerator targetPackage="com.power.entity.manage" targetProject="src/main/java">
+<!--            <property name="rootClass" value="com.power.entity.BaseDto" />-->
+<!--            <property name="trimStrings" value="true" />-->
+        </javaModelGenerator>
+
+        <!-- xml生成目录 -->
+        <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources"/>
+
+<!--
+        mapper生成目录
+        type:
+            MyBatis3:
+                * ANNOTATEDMAPPER:基于注解的Mapper接口，不会有对应的XML映射文件
+                * MIXEDMAPPER:XML和注解的混合形式，(上面这种情况中的)SqlProvider注解方法会被XML替代。
+                * XMLMAPPER:所有的方法都在XML中，接口调用依赖XML文件。
+            MyBatis3Simple:
+                * ANNOTATEDMAPPER:基于注解的Mapper接口，不会有对应的XML映射文件
+                * XMLMAPPER:所有的方法都在XML中，接口调用依赖XML文件。
+        rootInterface: 用于指定一个所有生成的接口都继承的父接口，这个值可以通过<table>配置的rootInterface属性覆盖。
+-->
+        <javaClientGenerator targetPackage="com.power.mapper" targetProject="src/main/java"
+                             type="XMLMAPPER"/>
+<!--
+        如果xml中方法生成的多次，需要指定schema属性，或者在url里设置schema
+        指定要生成的表，可以用sql通配符指定多个
+        %                              代表零个或多个字符
+        _ 	                           仅替代一个字符
+        [charlist]                     字符列中的任何单一字符
+        [^charlist] 或者 [!charlist]    不在字符列中的任何单一字符
+
+        该元素包含多个可选属性：
+        * schema:数据库的schema,可以使用SQL通配符匹配。如果设置了该值，生成SQL的表名会变成如schema.tableName的形式。
+        * catalog:数据库的catalog，如果设置了该值，生成SQL的表名会变成如catalog.tableName的形式。
+        * alias:如果指定，这个值会用在生成的select查询SQL的表的别名和列名上。 列名会被别名为 alias_actualColumnName(别名_实际列名) 这种模式。
+        * domainObjectName:生成对象的基本名称。如果没有指定，MBG会自动根据表名来生成名称。
+        * enableXXX:XXX代表多种SQL方法，该属性用来指定是否生成对应的XXX语句。
+        * selectByPrimaryKeyQueryId:DBA跟踪工具会用到，具体请看详细文档。
+        * selectByExampleQueryId:DBA跟踪工具会用到，具体请看详细文档。
+        * modelType:和<context>的defaultModelType含义一样，这里可以针对表进行配置，这里的配置会覆盖<context>的defaultModelType配置。
+        * escapeWildcards:这个属性表示当查询列，是否对schema和表名中的SQL通配符 ('_' and '%') 进行转义。 对于某些驱动当schema或表名中包含SQL通配符时（例如，一个表名是MY_TABLE，有一些驱动需要将下划线进行转义）是必须的。默认值是false。
+        * delimitIdentifiers:是否给标识符增加**分隔符**。默认false。当catalog,schema或tableName中包含空白时，默认为true。
+        * delimitAllColumns:是否对所有列添加**分隔符**。默认false。
+
+        该元素包含多个可用的<property>子元素，可选属性为：
+        * constructorBased:和<javaModelGenerator>中的属性含义一样。
+        * ignoreQualifiersAtRuntime:生成的SQL中的表名将不会包含schema和catalog前缀。
+        * immutable:和<javaModelGenerator>中的属性含义一样。
+        * modelOnly:此属性用于配置是否为表只生成实体类。如果设置为true就不会有Mapper接口。如果配置了<sqlMapGenerator>，并且modelOnly为true，那么XML映射文件中只有实体对象的映射元素(<resultMap>)。如果为true还会覆盖属性中的enableXXX方法，将不会生成任何CRUD方法。
+        * rootClass:和<javaModelGenerator>中的属性含义一样。
+        * rootInterface:和<javaClientGenerator>中的属性含义一样。
+        * runtimeCatalog:运行时的catalog，当生成表和运行环境的表的catalog不一样的时候可以使用该属性进行配置。
+        * runtimeSchema:运行时的schema，当生成表和运行环境的表的schema不一样的时候可以使用该属性进行配置。
+        * runtimeTableName:运行时的tableName，当生成表和运行环境的表的tableName不一样的时候可以使用该属性进行配置。
+        * selectAllOrderByClause:该属性值会追加到selectAll方法后的SQL中，会直接跟order by拼接后添加到SQL末尾。
+        * useActualColumnNames:如果设置为true,那么MBG会使用从数据库元数据获取的列名作为生成的实体对象的属性。 如果为false(默认值)，MGB将会尝试将返回的名称转换为驼峰形式。 在这两种情况下，可以通过 元素显示指定，在这种情况下将会忽略这个（useActualColumnNames）属性。
+        * useColumnIndexes:如果是true,MBG生成resultMaps的时候会使用列的索引,而不是结果中列名的顺序。
+        * useCompoundPropertyNames:如果是true,那么MBG生成属性名的时候会将列名和列备注接起来. 这对于那些通过第四代语言自动生成列(例如:FLD22237),但是备注包含有用信息(例如:"customer id")的数据库来说很有用. 在这种情况下,MBG会生成属性名FLD2237_CustomerId。
+
+        除了<property>子元素外，<table>还包含以下子元素：
+        * <generatedKey> (0个或1个)
+            如果指定这个元素，MBG在生成insert的SQL映射文件中插入一个<selectKey>元素，即自增的序列
+            两个必选属性：
+            * column:生成列的列名
+            * sqlStatement:将返回新值的 SQL 语句。如果这是一个identity列
+                预定义值：Cloudscape、DB2、DB2_MF、Derby、HSQLDB、Informix、MySql、SqlServer、SYBASE、JDBC
+            两个可选属性：
+            * identity:当设置为true时,该列会被标记为identity列， 并且<selectKey>元素会被插入在insert后面。 当设置为false时，<selectKey>会插入到insert之前（通常是序列）。**重要**: 即使您type属性指定为post，您仍然需要为identity列将该参数设置为true。 这将标志MBG从插入列表中删除该列。默认值是false。
+            * type:type=post and identity=true的时候生成的<selectKey>中的order=AFTER,当type=pre的时候，identity只能为false，生成的<selectKey>中的order=BEFORE。可以这么理解，自动增长的列只有插入到数据库后才能得到ID，所以是AFTER,使用序列时，只有先获取序列之后，才能插入数据库，所以是BEFORE。
+
+            示例1：
+            <table tableName="user login info" domainObjectName="UserLoginInfo">
+                <generatedKey column="id" sqlStatement="Mysql"/>
+            </table>
+            生成：
+            <insert id="insert" parameterType="test.model.UserLoginInfo">
+                <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+                    SELECT LAST_INSERT_ID()
+                </selectKey>
+                insert into `user login info` (Id, username, logindate, loginip)
+                values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{logindate,jdbcType=TIMESTAMP}, #{loginip,jdbcType=VARCHAR})
+            </insert>
+
+            示例2：
+            <table tableName="user login info" domainObjectName="UserLoginInfo">
+                <generatedKey column="id" sqlStatement="select SEQ_ID.nextval from dual"/>
+            </table>
+            生成：
+            <insert id="insert" parameterType="test.model.UserLoginInfo">
+                <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.Integer">
+                    select SEQ_ID.nextval from dual
+                </selectKey>
+                insert into `user login info` (Id, username, logindate, loginip)
+                values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{logindate,jdbcType=TIMESTAMP},#{loginip,jdbcType=VARCHAR})
+            </insert>
+
+        * <columnRenamingRule> (0个或1个)
+            可以用来去除前缀
+            比如表明为CUST_BUSINESS_NAME、CUST_STREET_ADDRESS、CUST_CITY
+            可以把前缀去除：
+            <columnRenamingRule searchString="^CUST_" replaceString="" />
+            因为实现使用的是java.util.regex.Matcher.replaceAll，所以支持正则
+
+        * <columnOverride> (0个或多个)
+            该元素从将某些属性默认计算的值更改为指定的值
+            必须属性：
+            * column:要重写的列名。
+            可选属性：
+            * property:要使用的Java属性的名称。如果没有指定，MBG会根据列名生成。 例如，如果一个表的一列名为STRT_DTE，MBG会根据<table>的useActualColumnNames属性生成STRT_DTE或strtDte。
+            * javaType:该列属性值为完全限定的Java类型。如果需要，这可以覆盖由JavaTypeResolver计算出的类型。 对某些数据库来说，这是必要的用来处理**“奇怪的”**数据库类型（例如MySql的unsigned bigint类型需要映射为java.lang.Object)。
+            * jdbcType:该列的JDBC类型(INTEGER, DECIMAL, NUMERIC, VARCHAR等等)。 如果需要，这可以覆盖由JavaTypeResolver计算出的类型。 对某些数据库来说，这是必要的用来处理怪异的JDBC驱动 (例如DB2的LONGVARCHAR类型需要为iBATIS 映射为VARCHAR)。
+            * typeHandler:用户定义的需要用来处理这列的类型处理器。它必须是一个继承iBATIS的TypeHandler类或TypeHandlerCallback接口（该接口很容易继承）的全限定的类名。如果没有指定或者是空白，iBATIS会用默认的类型处理器来处理类型。**重要**:MBG不会校验这个类型处理器是否存在或者可用。 MGB只是简单的将这个值插入到生成的SQL映射的配置文件中。
+            * delimitedColumnName:指定是否应在生成的SQL的列名称上增加**分隔符**。 如果列的名称中包含空格，MGB会自动添加**分隔符**， 所以这个重写只有当列名需要强制为一个合适的名字或者列名是数据库中的保留字时是必要的。
+            如：
+            <table schema="DB2ADMIN" tableName="ALLTYPES" >
+                <columnOverride column="LONG_VARCHAR_FIELD" javaType="java.lang.String" jdbcType="VARCHAR" />
+            </table>
+
+        * <ignoreColumn> (0个或多个)
+            该元素可以用来屏蔽不需要生成的列
+-->
+        <table tableName="ISOLATED_INFO" schema="C##ROAR_ISOLATED">
+            <generatedKey column="RID" sqlStatement="JDBC"/>
+        </table>
+    </context>
+</generatorConfiguration>
