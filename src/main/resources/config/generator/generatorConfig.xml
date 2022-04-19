@@ -37,8 +37,8 @@
         <javaClientGenerator targetPackage="com.power.mapper" targetProject="src/main/java"
                              type="XMLMAPPER"/>
 
-        <table tableName="ISOLATED_INFO" schema="C##ROAR_ISOLATED">
-            <generatedKey column="RID" sqlStatement="select SEQ_ISOLATED_INFO.nextval from dual"/>
+        <table tableName="ISOLATED_ROOM">
+            <generatedKey column="RID" sqlStatement="select SEQ_{1}.nextval from dual" />
         </table>
     </context>
 </generatorConfiguration>
